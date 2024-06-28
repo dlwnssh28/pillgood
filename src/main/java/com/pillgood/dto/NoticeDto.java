@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoticeDTO {
+public class NoticeDto {
 
     private Integer noticeNo;
     private String noticeTitle;
