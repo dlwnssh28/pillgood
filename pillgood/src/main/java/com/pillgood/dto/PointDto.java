@@ -11,11 +11,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubscriptionDto {
-    private int subscriptionId;
+public class PointDto {
+    private int pointId;
     private String memberUniqueId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private String subscriptionStatus;
-    private String paymentNo;
+    private String pointMasterId;
+    private String pointStatusCode;
+    private int points;
+    private LocalDateTime transactionDate;
+    private LocalDateTime expiryDate;
+    private String referenceId;
 }

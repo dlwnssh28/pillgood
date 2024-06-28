@@ -43,14 +43,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // 언급된 경로는 인증 없이 접근 가능
-                        .requestMatchers("/login", "/css/**", "/images/**", "/js/**", "/admin/members/register", "/admin/members/login", "/admin/**").permitAll()
+                        .requestMatchers("/login", "/css/**", "/images/**", "/js/**", "/members/register", "/members/login", "/admin/**", "/api/**").permitAll()
                         .requestMatchers("/mypage").authenticated()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin // 롬 기반 로그인 설정
                         // 로그인 페이지 url 설정
-                        .loginPage("/admin/members/login")
+                        .loginPage("/members/login")
                         .loginProcessingUrl("/login")
                         .successHandler(successHandler) // 성공 핸들러 추가
                         .permitAll()
@@ -61,7 +61,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session // 세션 관리 설정
                         // 세션이 유효하지 않을 시 리디렉션 url
-                        .invalidSessionUrl("/admin/members/login")
+                        .invalidSessionUrl("/members/login")
                 )
                 .logout(logout -> logout
                         // 로그아웃 url

@@ -1,5 +1,6 @@
 package com.pillgood.service;
 
+import com.pillgood.config.Role;
 import com.pillgood.dto.MemberDto;
 import com.pillgood.entity.Member;
 import com.pillgood.repository.MemberRepository;
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberDto createMember(MemberDto memberDto) {
         Member member = convertToEntity(memberDto);
         member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+        member.setMemberLevel(Role.USER);
         member = memberRepository.save(member);
         return convertToDto(member);
     }

@@ -1,9 +1,16 @@
 package com.pillgood.dto;
 
-import lombok.Data;
 import java.time.LocalDateTime;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RefundDto {
     private int refundId;
     private LocalDateTime refundRequestDate;

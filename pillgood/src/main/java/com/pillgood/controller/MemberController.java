@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/members")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
 
