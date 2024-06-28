@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,22 @@ public class MemberController {
             System.out.println("멤버가 존재하지 않습니다.");
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+    }
+
+    //세션 체크 엔드포인트 추가
+    @GetMapping("/check-session")
+    public ResponseEntity<?> checkSession(HttpSession session) {
+        System.out.println("세션 체크 엔드포인트 호출됨");
+        MemberDto member = (MemberDto) session.getAttribute("member");
+        System.out.println("세션 확인 - member: " + member); // 디버깅 로그 추가
+        if (member != null) {
+            System.out.println("세션 확인: 사용자 이메일 - " + member.getEmail());
+            //return ResponseEntity.ok("Session is active");
+            return ResponseEntity.ok(Collections.singletonMap("user", member)); // 수정: 사용자 정보 반환
+        } else {
+            System.out.println("세션 확인: 세션이 없습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
         }
     }
 
