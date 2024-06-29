@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartDto {
-    private int cartNo;
+	private int cartNo;
     private String memberUniqueId;
     private int productId;
     private int productQuantity;
