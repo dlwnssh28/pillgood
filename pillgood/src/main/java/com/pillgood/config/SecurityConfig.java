@@ -54,7 +54,6 @@ public class SecurityConfig {
                                 , "/admin/**"
                                 , "/api/**"
                                 , "/members/check-session").permitAll()
-                        .requestMatchers("/mypage").authenticated()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )

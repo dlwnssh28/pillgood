@@ -27,6 +27,26 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Optional<MemberDto> findById(String memberId) {
+        return memberRepository.findById(memberId)
+                .map(member -> {
+                    MemberDto memberDto = new MemberDto();
+                    memberDto.setEmail(member.getEmail());
+                    memberDto.setPassword(member.getPassword());
+                    memberDto.setMemberUniqueId(member.getMemberUniqueId());
+                    memberDto.setName(member.getName());
+                    memberDto.setAge(member.getAge());
+                    memberDto.setGender(member.getGender());
+                    memberDto.setPhoneNumber(member.getPhoneNumber());
+                    memberDto.setRegistrationDate(member.getRegistrationDate());
+                    memberDto.setSubscriptionStatus(member.getSubscriptionStatus());
+                    memberDto.setModifiedDate(member.getModifiedDate());
+                    memberDto.setMemberLevel(member.getMemberLevel());
+                    return memberDto;
+                });
+    }
+
+    @Override
     public MemberDto createMember(MemberDto memberDto) {
         Member member = convertToEntity(memberDto);
         member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
@@ -48,26 +68,43 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
     }
 
+//    @Override
+//    public Optional<MemberDto> updateMember(String id, MemberDto memberDto) {
+//        return memberRepository.findById(id)
+//                .map(member -> {
+//                    member.setEmail(memberDto.getEmail());
+//                    if (!memberDto.getPassword().isEmpty()) {
+//                        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+//                    }
+//                    member.setName(memberDto.getName());
+//                    member.setAge(memberDto.getAge());
+//                    member.setGender(memberDto.getGender());
+//                    member.setPhoneNumber(memberDto.getPhoneNumber());
+//                    member.setRegistrationDate(memberDto.getRegistrationDate());
+//                    member.setSubscriptionStatus(memberDto.getSubscriptionStatus());
+//                    member.setMemberLevel(memberDto.getMemberLevel());
+//                    member.setModifiedDate(memberDto.getModifiedDate());
+//                    member = memberRepository.save(member);
+//                    return convertToDto(member);
+//                });
+//    }
+
     @Override
     public Optional<MemberDto> updateMember(String id, MemberDto memberDto) {
         return memberRepository.findById(id)
-                .map(member -> {
-                    member.setEmail(memberDto.getEmail());
+                .map(existingMember -> {
+                    Member updatedMember = convertToEntity(memberDto);
+                    updatedMember.setMemberUniqueId(existingMember.getMemberUniqueId());
+                    updatedMember.setPassword(existingMember.getPassword()); // 기존 비밀번호 유지
                     if (!memberDto.getPassword().isEmpty()) {
-                        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+                        updatedMember.setPassword(passwordEncoder.encode(memberDto.getPassword()));
                     }
-                    member.setName(memberDto.getName());
-                    member.setAge(memberDto.getAge());
-                    member.setGender(memberDto.getGender());
-                    member.setPhoneNumber(memberDto.getPhoneNumber());
-                    member.setRegistrationDate(memberDto.getRegistrationDate());
-                    member.setSubscriptionStatus(memberDto.getSubscriptionStatus());
-                    member.setMemberLevel(memberDto.getMemberLevel());
-                    member.setModifiedDate(memberDto.getModifiedDate());
-                    member = memberRepository.save(member);
-                    return convertToDto(member);
+                    updatedMember = memberRepository.save(updatedMember);
+                    return convertToDto(updatedMember);
                 });
     }
+
+
 
     @Override
     public boolean deleteMember(String id) {
@@ -91,6 +128,7 @@ public class MemberServiceImpl implements MemberService {
                     MemberDto memberDto = new MemberDto();
                     memberDto.setEmail(member.getEmail());
                     memberDto.setPassword(member.getPassword());
+                    memberDto.setMemberUniqueId(member.getMemberUniqueId());
                     return memberDto;
                 });
     }
