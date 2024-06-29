@@ -1,15 +1,10 @@
 package com.pillgood.config;
 
-import com.pillgood.security.CustomAuthenticationSuccessHandler;
-import com.pillgood.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,6 +12,9 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.pillgood.security.CustomAuthenticationSuccessHandler;
+import com.pillgood.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity //Spring Security 활성화
@@ -43,7 +41,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // 언급된 경로는 인증 없이 접근 가능
-                        .requestMatchers("/login", "/css/**", "/images/**", "/js/**", "/members/register", "/members/login", "/admin/**", "/api/**").permitAll()
+                        .requestMatchers("/login", "/css/**", "/images/**", "/js/**").permitAll()
+                        .requestMatchers("/","/members/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/mypage").authenticated()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
