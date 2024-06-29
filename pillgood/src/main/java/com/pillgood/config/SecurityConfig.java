@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -43,14 +44,16 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // 언급된 경로는 인증 없이 접근 가능
-                        .requestMatchers("/login", "/css/**", "/images/**", "/js/**", "/admin/members/register", "/admin/members/login", "/admin/**").permitAll()
+                        .requestMatchers("/login", "/css/**", "/images/**", "/js/**").permitAll()
+                        .requestMatchers("/","/members/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/mypage").authenticated()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin // 롬 기반 로그인 설정
                         // 로그인 페이지 url 설정
-                        .loginPage("/admin/members/login")
+                        .loginPage("/members/login")
                         .loginProcessingUrl("/login")
                         .successHandler(successHandler) // 성공 핸들러 추가
                         .permitAll()
