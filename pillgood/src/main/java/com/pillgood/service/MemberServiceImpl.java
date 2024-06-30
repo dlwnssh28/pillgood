@@ -93,12 +93,13 @@ public class MemberServiceImpl implements MemberService {
     public Optional<MemberDto> updateMember(String id, MemberDto memberDto) {
         return memberRepository.findById(id)
                 .map(existingMember -> {
+                    if (!memberDto.getPassword().isEmpty()) {
+                        memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+                    } else {
+                        memberDto.setPassword(existingMember.getPassword());
+                    }
                     Member updatedMember = convertToEntity(memberDto);
                     updatedMember.setMemberUniqueId(existingMember.getMemberUniqueId());
-                    updatedMember.setPassword(existingMember.getPassword()); // 기존 비밀번호 유지
-                    if (!memberDto.getPassword().isEmpty()) {
-                        updatedMember.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-                    }
                     updatedMember = memberRepository.save(updatedMember);
                     return convertToDto(updatedMember);
                 });

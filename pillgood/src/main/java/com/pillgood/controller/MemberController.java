@@ -1,9 +1,7 @@
 package com.pillgood.controller;
 
 import com.pillgood.dto.MemberDto;
-import com.pillgood.entity.Member;
 import com.pillgood.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -20,7 +19,6 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-
 
     @PostMapping("/register")
     public MemberDto createMember(@RequestBody MemberDto memberDto) {
@@ -82,7 +80,9 @@ public class MemberController {
 
     @GetMapping("/check-session")
     public ResponseEntity<?> checkSession(HttpSession session) {
+        System.out.println("세션 확인 요청: " + session.getId());
         String memberId = (String) session.getAttribute("memberId");
+        System.out.println("세션에서 가져온 memberId: " + memberId);
         if (memberId != null) {
             Optional<MemberDto> memberOpt = memberService.findById(memberId);
             if (memberOpt.isPresent()) {
@@ -121,16 +121,47 @@ public class MemberController {
         return memberService.findByEmail(email);
     }
 
-    // 사용자 프로필 정보를 가져오는 엔드포인트
+    // 로그아웃 엔드포인트 추가
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate(); // 세션 무효화
+        System.out.println("로그아웃: 세션 무효화");
+        return ResponseEntity.ok("Logout successful");
+    }
+
     @GetMapping("/mypage")
     public ResponseEntity<?> getUserProfile(HttpSession session) {
-        MemberDto member = (MemberDto) session.getAttribute("member");
-        if (member != null) {
-            return ResponseEntity.ok(member);
+        String memberId = (String) session.getAttribute("memberId");
+        if (memberId != null) {
+            Optional<MemberDto> memberOpt = memberService.findById(memberId);
+            if (memberOpt.isPresent()) {
+                MemberDto member = memberOpt.get();
+                return ResponseEntity.ok(member);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid session");
+            }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
         }
     }
+
+    @PostMapping("/verifyPassword")
+    public ResponseEntity<?> verifyPassword(@RequestBody Map<String, String> request) {
+        String memberId = request.get("memberId");
+        String password = request.get("password");
+        System.out.println("클라이언트 측으로부터 넘어온 사용자 id: " + memberId);
+        System.out.println("클라이언트 측으로부터 넘어온 사용자 pw: " + password);
+        Optional<MemberDto> optionalMember = memberService.findById(memberId);
+        if (optionalMember.isPresent()) {
+            MemberDto foundMember = optionalMember.get();
+            if (memberService.checkPassword(password, foundMember.getPassword())) {
+                return ResponseEntity.ok("Password verified");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid member");
+        }
+    }
+
 }
-
-
