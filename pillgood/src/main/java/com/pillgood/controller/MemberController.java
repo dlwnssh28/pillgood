@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -124,11 +125,44 @@ public class MemberController {
     // 사용자 프로필 정보를 가져오는 엔드포인트
     @GetMapping("/mypage")
     public ResponseEntity<?> getUserProfile(HttpSession session) {
-        MemberDto member = (MemberDto) session.getAttribute("member");
-        if (member != null) {
-            return ResponseEntity.ok(member);
+        String memberId = (String) session.getAttribute("memberId");
+        if (memberId != null) {
+            Optional<MemberDto> memberOpt = memberService.findById(memberId);
+            if (memberOpt.isPresent()) {
+                MemberDto member = memberOpt.get();
+                return ResponseEntity.ok(member);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid session");
+            }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
         }
+    }
+    
+    @PostMapping("/verifyPassword")
+    public ResponseEntity<?> verifyPassword(@RequestBody Map<String, String> request) {
+        String memberId = request.get("memberId");
+        String password = request.get("password");
+
+        Optional<MemberDto> optionalMember = memberService.findById(memberId);
+        if (optionalMember.isPresent()) {
+            MemberDto foundMember = optionalMember.get();
+            if (memberService.checkPassword(password, foundMember.getPassword())) {
+                return ResponseEntity.ok("Password verified");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid member");
+        }
+    }
+
+    
+ // 로그아웃 엔드포인트 추가
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate(); // 세션 무효화
+        System.out.println("로그아웃: 세션 무효화");
+        return ResponseEntity.ok("Logout successful");
     }
 }
