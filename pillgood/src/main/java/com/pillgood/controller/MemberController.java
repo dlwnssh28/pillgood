@@ -91,6 +91,7 @@ public class MemberController {
                 MemberDto responseDto = new MemberDto();
                 responseDto.setMemberUniqueId(member.getMemberUniqueId());
                 System.out.println("세션 사용 중인 id : " + responseDto);
+                System.out.println("memberId : " + memberId);
                 return ResponseEntity.ok(Collections.singletonMap("user", responseDto));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid session");
