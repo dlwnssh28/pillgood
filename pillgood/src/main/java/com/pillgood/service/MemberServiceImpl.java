@@ -78,22 +78,22 @@ public class MemberServiceImpl implements MemberService {
         return false;
     }
 
-//    @Override
-//    public Optional<MemberDto> findByEmail(String email) {
-//        return memberRepository.findByEmail(email)
-//                .map(this::convertToDto);
-//    }
-
     @Override
     public Optional<MemberDto> findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .map(member -> {
-                    MemberDto memberDto = new MemberDto();
-                    memberDto.setEmail(member.getEmail());
-                    memberDto.setPassword(member.getPassword());
-                    return memberDto;
-                });
+                .map(this::convertToDto);
     }
+
+//    @Override
+//    public Optional<MemberDto> findByEmail(String email) {
+//        return memberRepository.findByEmail(email)
+//                .map(member -> {
+//                    MemberDto memberDto = new MemberDto();
+//                    memberDto.setEmail(member.getEmail());
+//                    memberDto.setPassword(member.getPassword());
+//                    return memberDto;
+//                });
+//    }
 
     private MemberDto convertToDto(Member member) {
         return new MemberDto(

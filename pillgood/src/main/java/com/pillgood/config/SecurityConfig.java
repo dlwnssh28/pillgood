@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.pillgood.security.CustomAuthenticationSuccessHandler;
 import com.pillgood.service.CustomUserDetailsService;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity //Spring Security 활성화
@@ -41,14 +42,21 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // 언급된 경로는 인증 없이 접근 가능
-                        .requestMatchers("/login", "/css/**", "/images/**", "/js/**").permitAll()
-                        .requestMatchers("/","/members/**").permitAll()
+                        .requestMatchers("/login"
+                                , "/css/**"
+                                , "/images/**"
+                                , "/js/**"
+                                , "/members/register"
+                                , "/members/login"
+                                , "/admin/**"
+                                , "/api/**"
+                                , "/members/check-session").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/mypage").authenticated()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
-                .formLogin(formLogin -> formLogin // 롬 기반 로그인 설정
+                .formLogin(formLogin -> formLogin // 폼 기반 로그인 설정
                         // 로그인 페이지 url 설정
                         .loginPage("/members/login")
                         .loginProcessingUrl("/login")
@@ -76,6 +84,7 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
                 )
+                .cors(withDefaults()) // CORS 설정 추가
                 .csrf().disable(); // CSRF 비활성화
 
         return http.build();
