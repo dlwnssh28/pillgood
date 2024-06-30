@@ -28,9 +28,23 @@ public class MemberController {
         return memberService.createMember(memberDto);
     }
 
-    @GetMapping("/find/{id}")
-    public Optional<MemberDto> getMemberById(@PathVariable String id) {
-        return memberService.getMemberById(id);
+    @GetMapping("/findById")
+    public ResponseEntity<?> getUserInfo(HttpSession session) {
+        String memberId = (String) session.getAttribute("memberId");
+        if (memberId != null) {
+            // DB에서 사용자 정보 조회
+            Optional<MemberDto> memberOpt = memberService.findById(memberId);
+            if (memberOpt.isPresent()) {
+                MemberDto member = memberOpt.get();
+                System.out.println("세션 확인: 사용자 ID - " + member.getMemberUniqueId());
+                return ResponseEntity.ok(Collections.singletonMap("user", member));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid session");
+            }
+        } else {
+            System.out.println("세션 확인: 세션이 없습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
+        }
     }
 
     @PostMapping("/login")
@@ -50,8 +64,8 @@ public class MemberController {
                 System.out.println("비밀번호 확인: 로그인 성공");
 
                 // 세션에 회원 정보 저장
-                session.setAttribute("member", foundMember);
-                System.out.println("세션 사용자 이메일: " + foundMember.getEmail());
+                session.setAttribute("memberId", foundMember.getMemberUniqueId());
+                System.out.println("세션 사용자 아이디: " + foundMember.getMemberUniqueId());
 
                 return ResponseEntity.ok("Login successful");
             } else {
@@ -66,18 +80,23 @@ public class MemberController {
         }
     }
 
-    //세션 체크 엔드포인트 추가
     @GetMapping("/check-session")
     public ResponseEntity<?> checkSession(HttpSession session) {
-        System.out.println("세션 체크 엔드포인트 호출됨");
-        MemberDto member = (MemberDto) session.getAttribute("member");
-        System.out.println("세션 확인 - member: " + member); // 디버깅 로그 추가
-        if (member != null) {
-            System.out.println("세션 확인: 사용자 이메일 - " + member.getEmail());
-            //return ResponseEntity.ok("Session is active");
-            return ResponseEntity.ok(Collections.singletonMap("user", member)); // 수정: 사용자 정보 반환
+        String memberId = (String) session.getAttribute("memberId");
+        if (memberId != null) {
+            Optional<MemberDto> memberOpt = memberService.findById(memberId);
+            if (memberOpt.isPresent()) {
+                MemberDto member = memberOpt.get();
+                // 필요한 최소한의 정보만 반환
+                MemberDto responseDto = new MemberDto();
+                responseDto.setMemberUniqueId(member.getMemberUniqueId());
+                System.out.println("세션 사용 중인 id : " + responseDto);
+                System.out.println("memberId : " + memberId);
+                return ResponseEntity.ok(Collections.singletonMap("user", responseDto));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid session");
+            }
         } else {
-            System.out.println("세션 확인: 세션이 없습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
         }
     }
@@ -101,4 +120,15 @@ public class MemberController {
     public Optional<MemberDto> findByEmail(@PathVariable String email) {
         return memberService.findByEmail(email);
     }
+
+    // 사용자 프로필 정보를 가져오는 엔드포인트
+    @GetMapping("/mypage")
+    public ResponseEntity<?> getUserProfile(HttpSession session) {
+        MemberDto member = (MemberDto) session.getAttribute("member");
+        if (member != null) {
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
+        }
     }
+}

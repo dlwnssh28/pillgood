@@ -13,5 +13,6 @@ public interface MemberService {
     boolean deleteMember(String id);
     Optional<MemberDto> findByEmail(String email);
     boolean checkPassword(String rawPassword, String encodedPassword);
-}
 
+    Optional<MemberDto> findById(String memberId);
+}
