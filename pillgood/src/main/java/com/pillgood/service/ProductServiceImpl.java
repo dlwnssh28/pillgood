@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.pillgood.entity.Nutrient;
 import org.springframework.stereotype.Service;
 
 import com.pillgood.dto.ProductDto;
@@ -36,7 +37,6 @@ class ProductServiceImpl implements ProductService {
     public Optional<ProductDto> updateProduct(int id, ProductDto updatedProductDTO) {
         return productRepository.findById(id)
                 .map(product -> {
-                    product.setNutrientId(updatedProductDTO.getNutrientId());
                     product.setProductName(updatedProductDTO.getProductName());
                     product.setProductImage(updatedProductDTO.getProductImage());
                     product.setPrice(updatedProductDTO.getPrice());
@@ -61,7 +61,7 @@ class ProductServiceImpl implements ProductService {
     public ProductDto convertToDTO(Product product) {
         return new ProductDto(
                 product.getProductId(),
-                product.getNutrientId(),
+                product.getNutrient().getNutrientId(),
                 product.getProductName(),
                 product.getProductImage(),
                 product.getPrice(),
@@ -73,16 +73,24 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     public Product convertToEntity(ProductDto productDTO) {
-        return new Product(
-                productDTO.getProductId(),
-                productDTO.getNutrientId(),
-                productDTO.getProductName(),
-                productDTO.getProductImage(),
-                productDTO.getPrice(),
-                productDTO.getStock(),
-                productDTO.getProductRegistrationDate(),
-                productDTO.getTarget()
-        );
+        Product product = new Product();
+        product.setProductId(productDTO.getProductId());
+
+        // nutrientId로 Nutrient 객체 설정
+        Nutrient nutrient = new Nutrient();
+        nutrient.setNutrientId(productDTO.getNutrientId());
+        product.setNutrient(nutrient);
+
+        product.setProductName(productDTO.getProductName());
+        product.setProductImage(productDTO.getProductImage());
+        product.setPrice(productDTO.getPrice());
+        product.setStock(productDTO.getStock());
+        product.setProductRegistrationDate(productDTO.getProductRegistrationDate());
+        product.setTarget(productDTO.getTarget());
+
+        return product;
     }
+
+
 }
 

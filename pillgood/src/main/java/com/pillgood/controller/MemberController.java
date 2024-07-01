@@ -34,7 +34,8 @@ public class MemberController {
             Optional<MemberDto> memberOpt = memberService.findById(memberId);
             if (memberOpt.isPresent()) {
                 MemberDto member = memberOpt.get();
-                System.out.println("세션 확인: 사용자 ID - " + member.getMemberUniqueId());
+//                System.out.println("세션 확인: 사용자 ID - " + member.getMemberUniqueId());
+//                System.out.println("세션 확인: 사용자 level - " + member.getMemberLevel());
                 return ResponseEntity.ok(Collections.singletonMap("user", member));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid session");
@@ -80,9 +81,9 @@ public class MemberController {
 
     @GetMapping("/check-session")
     public ResponseEntity<?> checkSession(HttpSession session) {
-        System.out.println("세션 확인 요청: " + session.getId());
+//        System.out.println("세션 확인 요청: " + session.getId());
         String memberId = (String) session.getAttribute("memberId");
-        System.out.println("세션에서 가져온 memberId: " + memberId);
+//        System.out.println("세션에서 가져온 memberId: " + memberId);
         if (memberId != null) {
             Optional<MemberDto> memberOpt = memberService.findById(memberId);
             if (memberOpt.isPresent()) {
@@ -90,8 +91,8 @@ public class MemberController {
                 // 필요한 최소한의 정보만 반환
                 MemberDto responseDto = new MemberDto();
                 responseDto.setMemberUniqueId(member.getMemberUniqueId());
-                System.out.println("세션 사용 중인 id : " + responseDto);
-                System.out.println("memberId : " + memberId);
+//                System.out.println("세션 사용 중인 id : " + responseDto);
+//                System.out.println("memberId : " + memberId);
                 return ResponseEntity.ok(Collections.singletonMap("user", responseDto));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid session");
@@ -105,11 +106,6 @@ public class MemberController {
     public List<MemberDto> getAllMembers() {
         return memberService.getAllMembers();
     }
-
-//    @PutMapping("/update/{id}")
-//    public Optional<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
-//        return memberService.updateMember(id, memberDto);
-//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
