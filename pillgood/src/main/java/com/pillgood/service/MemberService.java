@@ -15,6 +15,4 @@ public interface MemberService {
     boolean checkPassword(String rawPassword, String encodedPassword);
 
     Optional<MemberDto> findById(String memberId);
-
 }
-

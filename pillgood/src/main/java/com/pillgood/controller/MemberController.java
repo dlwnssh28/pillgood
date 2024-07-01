@@ -129,7 +129,8 @@ public class MemberController {
         return memberService.findByEmail(email);
     }
 
-    // 로그아웃 엔드포인트 추가
+    
+ // 로그아웃 엔드포인트 추가
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session) {
         session.invalidate(); // 세션 무효화
