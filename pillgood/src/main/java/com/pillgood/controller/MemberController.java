@@ -106,9 +106,17 @@ public class MemberController {
         return memberService.getAllMembers();
     }
 
+//    @PutMapping("/update/{id}")
+//    public Optional<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
+//        return memberService.updateMember(id, memberDto);
+//    }
+
     @PutMapping("/update/{id}")
-    public Optional<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
-        return memberService.updateMember(id, memberDto);
+    public ResponseEntity<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
+        Optional<MemberDto> updatedMember = memberService.updateMember(id, memberDto);
+        return updatedMember
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/delete/{id}")
@@ -149,8 +157,7 @@ public class MemberController {
     public ResponseEntity<?> verifyPassword(@RequestBody Map<String, String> request) {
         String memberId = request.get("memberId");
         String password = request.get("password");
-        System.out.println("클라이언트 측으로부터 넘어온 사용자 id: " + memberId);
-        System.out.println("클라이언트 측으로부터 넘어온 사용자 pw: " + password);
+
         Optional<MemberDto> optionalMember = memberService.findById(memberId);
         if (optionalMember.isPresent()) {
             MemberDto foundMember = optionalMember.get();
