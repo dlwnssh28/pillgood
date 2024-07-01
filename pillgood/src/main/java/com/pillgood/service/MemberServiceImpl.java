@@ -20,7 +20,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
@@ -97,13 +96,38 @@ public class MemberServiceImpl implements MemberService {
                     updatedMember.setMemberUniqueId(existingMember.getMemberUniqueId());
                     updatedMember.setPassword(existingMember.getPassword()); // 기존 비밀번호 유지
                     if (!memberDto.getPassword().isEmpty()) {
-                        updatedMember.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+//                        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
                     }
                     updatedMember = memberRepository.save(updatedMember);
                     return convertToDto(updatedMember);
                 });
     }
-
+  
+//    public Optional<MemberDto> updateMember(String id, MemberDto memberDto) {
+//        return memberRepository.findById(id)
+//                .map(existingMember -> {
+////                    // 비밀번호 처리
+////                    if (memberDto.getPassword() != null && !memberDto.getPassword().isEmpty()) {
+////                        // 새로운 비밀번호가 제공된 경우에만 암호화하여 저장
+////                        existingMember.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+////                    } else {
+////                        // 비밀번호가 비어 있으면 기존 비밀번호 유지
+////                        memberDto.setPassword(existingMember.getPassword());
+////                    }
+//
+//                    // 다른 필드를 업데이트
+//                    existingMember.setEmail(memberDto.getEmail() != null ? memberDto.getEmail() : existingMember.getEmail());
+//                    existingMember.setName(memberDto.getName() != null ? memberDto.getName() : existingMember.getName());
+//                    existingMember.setAge(memberDto.getAge() != null ? memberDto.getAge() : existingMember.getAge());
+//                    existingMember.setGender(memberDto.getGender() != null ? memberDto.getGender() : existingMember.getGender());
+//                    existingMember.setPhoneNumber(memberDto.getPhoneNumber() != null ? memberDto.getPhoneNumber() : existingMember.getPhoneNumber());
+//                    existingMember.setSubscriptionStatus(memberDto.getSubscriptionStatus() != null ? memberDto.getSubscriptionStatus() : existingMember.getSubscriptionStatus());
+//                    existingMember.setRegistrationDate(existingMember.getRegistrationDate());
+//
+//                    Member updatedMember = memberRepository.save(existingMember);
+//                    return convertToDto(updatedMember);
+//                });
+//    }
 
 
     @Override
@@ -114,12 +138,6 @@ public class MemberServiceImpl implements MemberService {
         }
         return false;
     }
-
-//    @Override
-//    public Optional<MemberDto> findByEmail(String email) {
-//        return memberRepository.findByEmail(email)
-//                .map(this::convertToDto);
-//    }
 
     @Override
     public Optional<MemberDto> findByEmail(String email) {
