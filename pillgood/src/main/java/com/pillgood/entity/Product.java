@@ -22,7 +22,7 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "nutrient_id", referencedColumnName = "nutrient_id")
     private Nutrient nutrient;
 

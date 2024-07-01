@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.pillgood.entity.Nutrient;
+import com.pillgood.repository.NutrientRepository;
 import org.springframework.stereotype.Service;
 
 import com.pillgood.dto.ProductDto;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final NutrientRepository nutrientRepository;
 
     @Override
     public List<ProductDto> getAllProducts() {
@@ -28,7 +30,12 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProduct(ProductDto productDTO) {
+        // dto -> entity 변환
         Product product = convertToEntity(productDTO);
+        // nutrient 엔티티 병합
+        Nutrient nutrient = nutrientRepository.findById(product.getNutrient().getNutrientId())
+                .orElseThrow(() -> new RuntimeException("Nutrient를 찾을 수 없음"));
+        // product 엔티티 저장
         Product savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
     }
