@@ -82,7 +82,7 @@ public class MemberController {
     public ResponseEntity<?> checkSession(HttpSession session) {
         System.out.println("세션 확인 요청: " + session.getId());
         String memberId = (String) session.getAttribute("memberId");
-        System.out.println("세션에서 가져온 memberId: " + memberId);
+        System.out.println("세션에서 가져온 memberId: " + memberId );
         if (memberId != null) {
             Optional<MemberDto> memberOpt = memberService.findById(memberId);
             if (memberOpt.isPresent()) {
