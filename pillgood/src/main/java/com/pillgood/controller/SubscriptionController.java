@@ -17,13 +17,13 @@ import com.pillgood.dto.SubscriptionDto;
 import com.pillgood.service.SubscriptionService;
 
 @RestController
-@RequestMapping("/api/subscriptions")
+@RequestMapping("/subscriptions")
 public class SubscriptionController {
 
     @Autowired
     private SubscriptionService subscriptionService;
 
-    @GetMapping
+    @GetMapping("/list")
     public List<SubscriptionDto> getAllSubscriptions() {
         return subscriptionService.getAllSubscriptions();
     }
@@ -38,13 +38,13 @@ public class SubscriptionController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<SubscriptionDto> createSubscription(@RequestBody SubscriptionDto subscriptionDto) {
         SubscriptionDto createdSubscription = subscriptionService.createSubscription(subscriptionDto);
         return ResponseEntity.ok(createdSubscription);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<SubscriptionDto> updateSubscription(@PathVariable int id, @RequestBody SubscriptionDto subscriptionDto) {
         SubscriptionDto updatedSubscription = subscriptionService.updateSubscription(id, subscriptionDto);
         if (updatedSubscription != null) {
@@ -54,7 +54,7 @@ public class SubscriptionController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteSubscription(@PathVariable int id) {
         subscriptionService.deleteSubscription(id);
         return ResponseEntity.noContent().build();

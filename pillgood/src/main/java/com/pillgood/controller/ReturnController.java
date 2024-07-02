@@ -22,7 +22,7 @@ public class ReturnController {
     @Autowired
     private ReturnService returnService;
 
-    @GetMapping
+    @GetMapping("/list")
     public List<ReturnDto> getAllReturns() {
         return returnService.getAllReturns();
     }
@@ -37,13 +37,13 @@ public class ReturnController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ReturnDto> createReturn(@RequestBody ReturnDto returnDto) {
         ReturnDto createdReturn = returnService.createReturn(returnDto);
         return ResponseEntity.ok(createdReturn);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ReturnDto> updateReturn(@PathVariable int id, @RequestBody ReturnDto returnDto) {
         ReturnDto updatedReturn = returnService.updateReturn(id, returnDto);
         if (updatedReturn != null) {
@@ -53,7 +53,7 @@ public class ReturnController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteReturn(@PathVariable int id) {
         returnService.deleteReturn(id);
         return ResponseEntity.noContent().build();

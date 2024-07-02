@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ownedcoupons")
+@RequestMapping("/admin/ownedcoupons")
 @RequiredArgsConstructor
 public class OwnedcouponController {
 
     private final OwnedcouponService ownedcouponService;
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<OwnedcouponDto>> getAllOwnedCoupons() {
         List<OwnedcouponDto> ownedcoupons = ownedcouponService.getAllOwnedCoupons();
         return ResponseEntity.ok(ownedcoupons);
@@ -34,20 +34,20 @@ public class OwnedcouponController {
         return ResponseEntity.ok(ownedcoupons);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<OwnedcouponDto> createOwnedCoupon(@RequestBody OwnedcouponDto ownedcouponDto) {
         OwnedcouponDto createdOwnedCoupon = ownedcouponService.createOwnedCoupon(ownedcouponDto);
         return ResponseEntity.ok(createdOwnedCoupon);
     }
 
-    @PutMapping("/{ownedCouponId}")
+    @PutMapping("/update/{ownedCouponId}")
     public ResponseEntity<OwnedcouponDto> updateOwnedCoupon(@PathVariable Integer ownedCouponId, @RequestBody OwnedcouponDto ownedcouponDto) {
         return ownedcouponService.updateOwnedCoupon(ownedCouponId, ownedcouponDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{ownedCouponId}")
+    @DeleteMapping("/delete/{ownedCouponId}")
     public ResponseEntity<Void> deleteOwnedCoupon(@PathVariable Integer ownedCouponId) {
         if (ownedcouponService.deleteOwnedCoupon(ownedCouponId)) {
             return ResponseEntity.noContent().build();
