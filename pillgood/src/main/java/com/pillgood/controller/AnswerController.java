@@ -23,7 +23,7 @@ public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
-    @GetMapping
+    @GetMapping("/list")
     public List<AnswerDto> getAllAnswers() {
         return answerService.getAllAnswers();
     }
@@ -38,13 +38,13 @@ public class AnswerController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<AnswerDto> createAnswer(@RequestBody AnswerDto answerDto) {
         AnswerDto createdAnswer = answerService.createAnswer(answerDto);
         return ResponseEntity.ok(createdAnswer);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<AnswerDto> updateAnswer(@PathVariable int id, @RequestBody AnswerDto answerDto) {
         AnswerDto updatedAnswer = answerService.updateAnswer(id, answerDto);
         if (updatedAnswer != null) {
@@ -54,7 +54,7 @@ public class AnswerController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAnswer(@PathVariable int id) {
         answerService.deleteAnswer(id);
         return ResponseEntity.noContent().build();

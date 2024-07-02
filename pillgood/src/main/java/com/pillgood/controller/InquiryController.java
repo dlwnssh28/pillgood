@@ -23,7 +23,7 @@ public class InquiryController {
     @Autowired
     private InquiryService inquiryService;
 
-    @GetMapping
+    @GetMapping("/list")
     public List<InquiryDto> getAllInquiries() {
         return inquiryService.getAllInquiries();
     }
@@ -38,13 +38,13 @@ public class InquiryController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<InquiryDto> createInquiry(@RequestBody InquiryDto inquiryDto) {
         InquiryDto createdInquiry = inquiryService.createInquiry(inquiryDto);
         return ResponseEntity.ok(createdInquiry);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<InquiryDto> updateInquiry(@PathVariable int id, @RequestBody InquiryDto inquiryDto) {
         InquiryDto updatedInquiry = inquiryService.updateInquiry(id, inquiryDto);
         if (updatedInquiry != null) {
@@ -54,7 +54,7 @@ public class InquiryController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteInquiry(@PathVariable int id) {
         inquiryService.deleteInquiry(id);
         return ResponseEntity.noContent().build();
