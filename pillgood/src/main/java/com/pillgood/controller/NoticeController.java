@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/notices")
+@RequestMapping("/admin/notices")
 @RequiredArgsConstructor
 public class NoticeController {
 
     private final NoticeService noticeService;
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<NoticeDto>> getAllNotices() {
         List<NoticeDto> notices = noticeService.getAllNotices();
         return ResponseEntity.ok(notices);
@@ -28,20 +28,20 @@ public class NoticeController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<NoticeDto> createNotice(@RequestBody NoticeDto noticeDto) {
         NoticeDto createdNotice = noticeService.createNotice(noticeDto);
         return ResponseEntity.ok(createdNotice);
     }
 
-    @PutMapping("/{noticeNo}")
+    @PutMapping("/update/{noticeNo}")
     public ResponseEntity<NoticeDto> updateNotice(@PathVariable Integer noticeNo, @RequestBody NoticeDto noticeDto) {
         return noticeService.updateNotice(noticeNo, noticeDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{noticeNo}")
+    @DeleteMapping("/delete/{noticeNo}")
     public ResponseEntity<Void> deleteNotice(@PathVariable Integer noticeNo) {
         if (noticeService.deleteNotice(noticeNo)) {
             return ResponseEntity.noContent().build();

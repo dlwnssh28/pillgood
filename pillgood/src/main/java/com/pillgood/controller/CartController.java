@@ -3,7 +3,6 @@ package com.pillgood.controller;
 import com.pillgood.dto.CartDto;
 import com.pillgood.service.CartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +15,6 @@ public class CartController {
 
     private final CartService cartService;
 
-    @GetMapping("/create")
-    public String cartForm(Model model) {
-        model.addAttribute("cartDTO", new CartDto());
-        return "cartForm";
-    }
-
     @PostMapping("/create")
     public Optional<CartDto> createCart(@RequestBody CartDto cartDto) {
         return Optional.of(cartService.createCart(cartDto));
@@ -33,10 +26,13 @@ public class CartController {
     }
 
     @GetMapping("/list")
-    public String getAllCarts(Model model) {
-        List<CartDto> carts = cartService.getAllCarts();
-        model.addAttribute("carts", carts);
-        return "cartList";
+    public List<CartDto> getAllCarts() {
+        return cartService.getAllCarts();
+    }
+
+    @GetMapping("/member/{memberId}")
+    public List<CartDto> getCartByMemberId(@PathVariable String memberId) {
+        return cartService.getCartByMemberId(memberId);
     }
 
     @PutMapping("/update/{id}")
