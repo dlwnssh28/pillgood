@@ -2,12 +2,7 @@ package com.pillgood.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +22,9 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "nutrient_id")
-    private int nutrientId;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "nutrient_id", referencedColumnName = "nutrient_id")
+    private Nutrient nutrient;
 
     @Column(name = "product_name")
     private String productName;

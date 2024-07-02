@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/efficiencies")
+@RequestMapping("/efficiencies/admin")
 @RequiredArgsConstructor
 public class EfficiencyController {
 
