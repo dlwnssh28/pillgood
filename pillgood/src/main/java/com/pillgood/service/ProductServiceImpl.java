@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.pillgood.entity.Nutrient;
-import com.pillgood.repository.CartRepository;
+
 import com.pillgood.repository.NutrientRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final NutrientRepository nutrientRepository;
-    private final CartRepository cartRepository;
+
 
     @Override
     public List<ProductDto> getAllProducts() {
@@ -79,7 +79,6 @@ class ProductServiceImpl implements ProductService {
         Product product = new Product();
         product.setProductId(productDTO.getProductId());
 
-        // nutrientId로 Nutrient 객체 설정
         Nutrient nutrient = new Nutrient();
         nutrient.setNutrientId(productDTO.getNutrientId());
         product.setNutrient(nutrient);
