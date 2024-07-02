@@ -26,6 +26,11 @@ class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Optional<ProductDto> getProductById(int id) {
+        return productRepository.findById(id).map(this::convertToDTO);
+    }
+
+    @Override
     public ProductDto createProduct(ProductDto productDTO) {
         Product product = convertToEntity(productDTO);
         Product savedProduct = productRepository.save(product);
@@ -85,4 +90,3 @@ class ProductServiceImpl implements ProductService {
         );
     }
 }
-

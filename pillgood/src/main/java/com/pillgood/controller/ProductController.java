@@ -24,6 +24,14 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/view/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable int id) {
+        Optional<ProductDto> productDTO = productService.getProductById(id);
+        return productDTO
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PostMapping("/create")
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDTO) {
         ProductDto createdProductDTO = productService.createProduct(productDTO);
