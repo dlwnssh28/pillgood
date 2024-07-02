@@ -1,9 +1,7 @@
 package com.pillgood.controller;
 
 import com.pillgood.dto.MemberDto;
-import com.pillgood.entity.Member;
 import com.pillgood.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,6 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-
 
     @PostMapping("/register")
     public MemberDto createMember(@RequestBody MemberDto memberDto) {
@@ -83,7 +80,9 @@ public class MemberController {
 
     @GetMapping("/check-session")
     public ResponseEntity<?> checkSession(HttpSession session) {
+        System.out.println("세션 확인 요청: " + session.getId());
         String memberId = (String) session.getAttribute("memberId");
+        System.out.println("세션에서 가져온 memberId: " + memberId );
         if (memberId != null) {
             Optional<MemberDto> memberOpt = memberService.findById(memberId);
             if (memberOpt.isPresent()) {
@@ -107,9 +106,17 @@ public class MemberController {
         return memberService.getAllMembers();
     }
 
+//    @PutMapping("/update/{id}")
+//    public Optional<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
+//        return memberService.updateMember(id, memberDto);
+//    }
+
     @PutMapping("/update/{id}")
-    public Optional<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
-        return memberService.updateMember(id, memberDto);
+    public ResponseEntity<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
+        Optional<MemberDto> updatedMember = memberService.updateMember(id, memberDto);
+        return updatedMember
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/delete/{id}")
@@ -122,7 +129,15 @@ public class MemberController {
         return memberService.findByEmail(email);
     }
 
-    // 사용자 프로필 정보를 가져오는 엔드포인트
+    
+ // 로그아웃 엔드포인트 추가
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate(); // 세션 무효화
+        System.out.println("로그아웃: 세션 무효화");
+        return ResponseEntity.ok("Logout successful");
+    }
+
     @GetMapping("/mypage")
     public ResponseEntity<?> getUserProfile(HttpSession session) {
         String memberId = (String) session.getAttribute("memberId");
@@ -138,7 +153,7 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No active session");
         }
     }
-    
+
     @PostMapping("/verifyPassword")
     public ResponseEntity<?> verifyPassword(@RequestBody Map<String, String> request) {
         String memberId = request.get("memberId");
@@ -157,12 +172,4 @@ public class MemberController {
         }
     }
 
-    
- // 로그아웃 엔드포인트 추가
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.invalidate(); // 세션 무효화
-        System.out.println("로그아웃: 세션 무효화");
-        return ResponseEntity.ok("Logout successful");
-    }
 }

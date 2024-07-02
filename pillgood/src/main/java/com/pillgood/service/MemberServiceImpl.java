@@ -20,7 +20,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
@@ -97,14 +96,12 @@ public class MemberServiceImpl implements MemberService {
                     updatedMember.setMemberUniqueId(existingMember.getMemberUniqueId());
                     updatedMember.setPassword(existingMember.getPassword()); // 기존 비밀번호 유지
                     if (!memberDto.getPassword().isEmpty()) {
-                        updatedMember.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+//                        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
                     }
                     updatedMember = memberRepository.save(updatedMember);
                     return convertToDto(updatedMember);
                 });
     }
-
-
 
     @Override
     public boolean deleteMember(String id) {
@@ -114,12 +111,6 @@ public class MemberServiceImpl implements MemberService {
         }
         return false;
     }
-
-//    @Override
-//    public Optional<MemberDto> findByEmail(String email) {
-//        return memberRepository.findByEmail(email)
-//                .map(this::convertToDto);
-//    }
 
     @Override
     public Optional<MemberDto> findByEmail(String email) {

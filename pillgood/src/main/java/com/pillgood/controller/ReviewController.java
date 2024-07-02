@@ -15,7 +15,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<ReviewDto>> getAllReviews() {
         List<ReviewDto> reviews = reviewService.getAllReviews();
         return ResponseEntity.ok(reviews);
@@ -28,20 +28,20 @@ public class ReviewController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto reviewDto) {
         ReviewDto createdReview = reviewService.createReview(reviewDto);
         return ResponseEntity.ok(createdReview);
     }
 
-    @PutMapping("/{reviewId}")
+    @PutMapping("/update/{reviewId}")
     public ResponseEntity<ReviewDto> updateReview(@PathVariable Integer reviewId, @RequestBody ReviewDto reviewDto) {
         return reviewService.updateReview(reviewId, reviewDto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/delete/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable Integer reviewId) {
         if (reviewService.deleteReview(reviewId)) {
             return ResponseEntity.noContent().build();

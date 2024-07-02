@@ -12,5 +12,5 @@ public class CartDto {
     private String memberUniqueId;
     private int productId;
     private int productQuantity;
-    private int price;
+    private int price; // 추가
 }

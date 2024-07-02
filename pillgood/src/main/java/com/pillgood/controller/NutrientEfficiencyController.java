@@ -18,18 +18,18 @@ public class NutrientEfficiencyController {
 
     private final NutrientEfficiencyService nutrientEfficiencyService;
 
-    @GetMapping
+    @GetMapping("/list")
     public List<NutrientEfficiencyDto> getAllNutrientEfficiencies() {
         return nutrientEfficiencyService.getAllNutrientEfficiencies();
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<NutrientEfficiencyDto> createNutrientEfficiency(@RequestBody NutrientEfficiencyDto nutrientEfficiencyDTO) {
         NutrientEfficiencyDto createdNutrientEfficiency = nutrientEfficiencyService.createNutrientEfficiency(nutrientEfficiencyDTO);
         return ResponseEntity.ok(createdNutrientEfficiency);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<NutrientEfficiencyDto> updateNutrientEfficiency(
             @PathVariable int id,
             @RequestBody NutrientEfficiencyDto updatedNutrientEfficiencyDTO) {
@@ -38,7 +38,7 @@ public class NutrientEfficiencyController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteNutrientEfficiency(@PathVariable int id) {
         boolean isDeleted = nutrientEfficiencyService.deleteNutrientEfficiency(id);
         if (isDeleted) {
