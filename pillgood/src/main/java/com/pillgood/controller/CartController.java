@@ -2,6 +2,7 @@ package com.pillgood.controller;
 
 import com.pillgood.dto.CartDto;
 import com.pillgood.service.CartService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/create")
-    public Optional<CartDto> createCart(@RequestBody CartDto cartDto) {
+    public Optional<CartDto> createCart(@RequestBody CartDto cartDto, HttpSession session) {
         return Optional.of(cartService.createCart(cartDto));
     }
 

@@ -48,15 +48,15 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginMember(@RequestBody MemberDto memberDto, HttpSession session) {
-        System.out.println("입력 MemberDto: " + memberDto);
+//        System.out.println("입력 MemberDto: " + memberDto);
 
         // 이메일로 회원을 찾습니다.
         Optional<MemberDto> optionalMember = memberService.findByEmail(memberDto.getEmail());
-        System.out.println("optionalMember : " + optionalMember);
+//        System.out.println("optionalMember : " + optionalMember);
 
         if (optionalMember.isPresent()) {
             MemberDto foundMember = optionalMember.get();
-            System.out.println("멤버 검색 결과: " + foundMember);
+//            System.out.println("멤버 검색 결과: " + foundMember);
 
             // 비밀번호 일치 여부 확인
             if (memberService.checkPassword(memberDto.getPassword(), foundMember.getPassword())) {
@@ -64,7 +64,7 @@ public class MemberController {
 
                 // 세션에 회원 정보 저장
                 session.setAttribute("memberId", foundMember.getMemberUniqueId());
-                System.out.println("세션 사용자 아이디: " + foundMember.getMemberUniqueId());
+//                System.out.println("세션 사용자 아이디: " + foundMember.getMemberUniqueId());
 
                 return ResponseEntity.ok("Login successful");
             } else {

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.pillgood.entity.Nutrient;
+import com.pillgood.repository.CartRepository;
 import com.pillgood.repository.NutrientRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import com.pillgood.entity.Product;
 import com.pillgood.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final NutrientRepository nutrientRepository;
+    private final CartRepository cartRepository;
 
     @Override
     public List<ProductDto> getAllProducts() {
@@ -50,18 +53,10 @@ class ProductServiceImpl implements ProductService {
                     product.setStock(updatedProductDTO.getStock());
                     product.setProductRegistrationDate(updatedProductDTO.getProductRegistrationDate());
                     product.setTarget(updatedProductDTO.getTarget());
+                    product.setActive(updatedProductDTO.isActive());
                     Product updatedProduct = productRepository.save(product);
                     return convertToDTO(updatedProduct);
                 });
-    }
-
-    @Override
-    public boolean deleteProduct(int id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -74,7 +69,8 @@ class ProductServiceImpl implements ProductService {
                 product.getPrice(),
                 product.getStock(),
                 product.getProductRegistrationDate(),
-                product.getTarget()
+                product.getTarget(),
+                product.isActive() // boolean 타입으로 반환
         );
     }
 
@@ -94,10 +90,23 @@ class ProductServiceImpl implements ProductService {
         product.setStock(productDTO.getStock());
         product.setProductRegistrationDate(productDTO.getProductRegistrationDate());
         product.setTarget(productDTO.getTarget());
+        product.setActive(productDTO.isActive()); // boolean 타입으로 설정
 
         return product;
     }
 
-
+    @Transactional
+    @Override
+    public boolean setActive(int productId, boolean active) {
+        try {
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
+            product.setActive(active);
+            productRepository.save(product);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
-

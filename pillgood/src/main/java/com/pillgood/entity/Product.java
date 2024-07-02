@@ -43,5 +43,7 @@ public class Product {
 
     @Column(name = "target")
     private String target;
-    
+
+    @Column(name = "active", nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean active;
 }

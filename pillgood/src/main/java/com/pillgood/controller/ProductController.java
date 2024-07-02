@@ -1,6 +1,7 @@
 package com.pillgood.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -39,9 +40,10 @@ public class ProductController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
-        boolean deleted = productService.deleteProduct(id);
-        return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PutMapping("/{id}/status")
+    public boolean updateProductStatus(@PathVariable int id, @RequestBody Map<String, Boolean> status) {
+        boolean active = status.get("active");
+        return productService.setActive(id, active);
     }
+
 }

@@ -21,4 +21,5 @@ public class ProductDto {
     private int stock;
     private LocalDateTime productRegistrationDate;
     private String target;
+    private boolean active;
 }
