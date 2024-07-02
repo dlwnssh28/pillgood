@@ -12,9 +12,5 @@ public class CartDto {
     private String memberUniqueId;
     private int productId;
     private int productQuantity;
-<<<<<<< HEAD
     private int price; // 추가
-=======
-    private int price;
->>>>>>> origin/hzz
 }
