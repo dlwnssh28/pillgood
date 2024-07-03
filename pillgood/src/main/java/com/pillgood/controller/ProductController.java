@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,20 @@ public class ProductController {
         ProductDto createdProductDTO = productService.createProduct(productDTO);
         return new ResponseEntity<>(createdProductDTO, HttpStatus.CREATED);
     }
+
+//    @PostMapping("/create")
+//    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDTO) {
+//        System.out.println("----adding new product.");
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String jsonProduct = objectMapper.writeValueAsString(productDTO);
+//            System.out.println("C 입력 제품 정보: " + jsonProduct);
+//        } catch (Exception e) {
+//            System.out.println("Error converting productDTO to JSON: " + e.getMessage());
+//        }
+//        ProductDto createdProductDTO = productService.createProduct(productDTO);
+//        return new ResponseEntity<>(createdProductDTO, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable int id, @RequestBody ProductDto updatedProductDTO) {

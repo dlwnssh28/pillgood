@@ -30,7 +30,7 @@ public class Product {
     private String productName;
 
     @Column(name = "product_image")
-    private String productImage;
+    private String productImage; //quill
 
     @Column(name = "price")
     private int price;
