@@ -41,9 +41,14 @@ public class ProductController {
     }
 
     @PutMapping("/{id}/status")
-    public boolean updateProductStatus(@PathVariable int id, @RequestBody Map<String, Boolean> status) {
+    public ResponseEntity<Void> updateProductStatus(@PathVariable int id, @RequestBody Map<String, Boolean> status) {
         boolean active = status.get("active");
-        return productService.setActive(id, active);
+        boolean result = productService.setActive(id, active);
+        if (result) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
