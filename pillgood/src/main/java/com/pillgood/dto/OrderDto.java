@@ -18,7 +18,9 @@ public class OrderDto {
     private String orderRequest;
     private LocalDateTime orderDate;
     private String recipient;
+    private String postalCode;
     private String address;
+    private String detailedAddress;
     private String phoneNumber;
     private String memberUniqueId;
     private int ownedCouponId;
