@@ -30,7 +30,7 @@ public class Product {
     private String productName;
 
     @Column(name = "product_image")
-    private String productImage;
+    private String productImage; //quill
 
     @Column(name = "price")
     private int price;
@@ -43,5 +43,7 @@ public class Product {
 
     @Column(name = "target")
     private String target;
-    
+
+    @Column(name = "active", nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean active;
 }
