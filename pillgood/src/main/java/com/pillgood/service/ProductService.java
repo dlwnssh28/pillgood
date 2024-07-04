@@ -14,4 +14,5 @@ public interface ProductService {
     Product convertToEntity(ProductDto productDTO);
 
     boolean setActive(int id, boolean active);
+    Optional<ProductDto> getProductById(int id);
 }

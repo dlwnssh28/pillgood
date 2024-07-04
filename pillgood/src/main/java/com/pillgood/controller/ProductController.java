@@ -66,4 +66,12 @@ public class ProductController {
         }
     }
 
+    // 새로운 엔드포인트 추가
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable int id) {
+        Optional<ProductDto> productDTO = productService.getProductById(id);
+        return productDTO
+                .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }
