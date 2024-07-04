@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/deficiency-nutrients")
+@RequestMapping("/deficiency-nutrients/admin")
 @RequiredArgsConstructor
 public class DeficiencyNutrientController {
 

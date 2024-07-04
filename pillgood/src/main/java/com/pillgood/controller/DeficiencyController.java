@@ -10,21 +10,21 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/deficiencies")
+@RequestMapping("/deficiencies/admin")
 @RequiredArgsConstructor
 public class DeficiencyController {
 
     private final DeficiencyService deficiencyService;
 
     // 새로운 부족 생성 폼
-    @GetMapping
+    @GetMapping("/create")
     public String deficiencyForm(Model model) {
         model.addAttribute("deficiencyDto", new DeficiencyDto());
         return "deficiencyForm";
     }
 
     // 새로운 부족 생성
-    @PostMapping
+    @PostMapping("/create")
     public String createDeficiency(@RequestBody DeficiencyDto deficiencyDto, Model model) {
         DeficiencyDto createdDeficiency = deficiencyService.createDeficiency(deficiencyDto);
         model.addAttribute("deficiencyDto", createdDeficiency);

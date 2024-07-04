@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,7 +51,9 @@ public class MemberServiceImpl implements MemberService {
         Member member = convertToEntity(memberDto);
         member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
         member.setMemberLevel(Role.USER);
+        member.setRegistrationDate(LocalDateTime.now());
         member = memberRepository.save(member);
+
         return convertToDto(member);
     }
 
@@ -67,27 +70,6 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public Optional<MemberDto> updateMember(String id, MemberDto memberDto) {
-//        return memberRepository.findById(id)
-//                .map(member -> {
-//                    member.setEmail(memberDto.getEmail());
-//                    if (!memberDto.getPassword().isEmpty()) {
-//                        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-//                    }
-//                    member.setName(memberDto.getName());
-//                    member.setAge(memberDto.getAge());
-//                    member.setGender(memberDto.getGender());
-//                    member.setPhoneNumber(memberDto.getPhoneNumber());
-//                    member.setRegistrationDate(memberDto.getRegistrationDate());
-//                    member.setSubscriptionStatus(memberDto.getSubscriptionStatus());
-//                    member.setMemberLevel(memberDto.getMemberLevel());
-//                    member.setModifiedDate(memberDto.getModifiedDate());
-//                    member = memberRepository.save(member);
-//                    return convertToDto(member);
-//                });
-//    }
-
     @Override
     public Optional<MemberDto> updateMember(String id, MemberDto memberDto) {
         return memberRepository.findById(id)
@@ -95,6 +77,7 @@ public class MemberServiceImpl implements MemberService {
                     Member updatedMember = convertToEntity(memberDto);
                     updatedMember.setMemberUniqueId(existingMember.getMemberUniqueId());
                     updatedMember.setPassword(existingMember.getPassword()); // 기존 비밀번호 유지
+                    updatedMember.setModifiedDate(LocalDateTime.now());
                     if (!memberDto.getPassword().isEmpty()) {
 //                        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
                     }

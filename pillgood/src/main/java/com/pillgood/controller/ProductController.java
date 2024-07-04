@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
+@RequestMapping("/admin/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -34,6 +34,7 @@ public class ProductController {
 
     @PostMapping("/create")
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDTO) {
+        System.out.println("----adding new product.");
         ProductDto createdProductDTO = productService.createProduct(productDTO);
         return new ResponseEntity<>(createdProductDTO, HttpStatus.CREATED);
     }
