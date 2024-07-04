@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/detailed-questions")
+@RequestMapping("/detailed-questions/admin")
 @RequiredArgsConstructor
 public class DetailedQuestionController {
 

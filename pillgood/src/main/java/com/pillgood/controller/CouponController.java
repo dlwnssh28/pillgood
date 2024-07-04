@@ -1,8 +1,13 @@
 package com.pillgood.controller;
 
+import com.pillgood.dto.CartDto;
 import com.pillgood.dto.CouponDto;
 import com.pillgood.service.CouponService;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +25,7 @@ public class CouponController {
         List<CouponDto> coupons = couponService.getAllCoupons();
         return ResponseEntity.ok(coupons);
     }
-
+    
     @GetMapping("/admin/{couponId}")
     public ResponseEntity<CouponDto> getCouponById(@PathVariable Integer couponId) {
         return couponService.getCouponById(couponId) 

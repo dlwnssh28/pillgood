@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.pillgood.entity.Nutrient;
-
 import com.pillgood.repository.NutrientRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +21,17 @@ class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final NutrientRepository nutrientRepository;
-
-
+  
     @Override
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<ProductDto> getProductById(int id) {
+        return productRepository.findById(id).map(this::convertToDTO);
     }
 
     @Override
@@ -78,7 +81,7 @@ class ProductServiceImpl implements ProductService {
     public Product convertToEntity(ProductDto productDTO) {
         Product product = new Product();
         product.setProductId(productDTO.getProductId());
-
+        // nutrientId로 Nutrient 객체 설정
         Nutrient nutrient = new Nutrient();
         nutrient.setNutrientId(productDTO.getNutrientId());
         product.setNutrient(nutrient);
@@ -89,6 +92,7 @@ class ProductServiceImpl implements ProductService {
         product.setStock(productDTO.getStock());
         product.setProductRegistrationDate(productDTO.getProductRegistrationDate());
         product.setTarget(productDTO.getTarget());
+      
         product.setActive(productDTO.isActive()); // boolean 타입으로 설정
 
         return product;
@@ -113,6 +117,5 @@ class ProductServiceImpl implements ProductService {
     public Optional<ProductDto> getProductById(int id) {
         return productRepository.findById(id).map(ProductDto::new);
     }
-
 
 }

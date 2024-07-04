@@ -12,12 +12,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"}) // 프론트엔드 URL
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
@@ -44,6 +46,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/admin/products/create").permitAll()
                         .requestMatchers("/admin/upload/image").permitAll()
                         .requestMatchers("/uploads/**").permitAll() // 업로드된 파일 경로 허용
+//                        .requestMatchers("**/admin/**").hasRole("ADMIN")
                         .requestMatchers("/mypage").authenticated()
                         .anyRequest().authenticated()
                 )

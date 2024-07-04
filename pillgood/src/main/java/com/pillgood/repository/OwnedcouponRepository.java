@@ -1,5 +1,6 @@
 package com.pillgood.repository;
 
+import com.pillgood.entity.Coupon;
 import com.pillgood.entity.Ownedcoupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 
