@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface ProductService {
     List<ProductDto> getAllProducts();
-    Optional<ProductDto> getProductById(int id); // 추가
     ProductDto createProduct(ProductDto productDTO);
     Optional<ProductDto> updateProduct(int id, ProductDto updatedProductDTO);
     ProductDto convertToDTO(Product product);

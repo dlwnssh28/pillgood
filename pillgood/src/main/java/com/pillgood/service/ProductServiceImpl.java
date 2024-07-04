@@ -30,11 +30,6 @@ class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDto> getProductById(int id) {
-        return productRepository.findById(id).map(this::convertToDTO);
-    }
-
-    @Override
     public ProductDto createProduct(ProductDto productDTO) {
         // dto -> entity 변환
         Product product = convertToEntity(productDTO);

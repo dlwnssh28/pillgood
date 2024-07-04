@@ -108,7 +108,7 @@ public class MemberController {
     }
 
     @PutMapping("/update/{id}")
-    publsic ResponseEntity<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
+    public ResponseEntity<MemberDto> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
         Optional<MemberDto> updatedMember = memberService.updateMember(id, memberDto);
         return updatedMember
                 .map(ResponseEntity::ok)
