@@ -1,5 +1,6 @@
 package com.pillgood.service;
 
+import com.pillgood.dto.CouponDto;
 import com.pillgood.dto.OwnedcouponDto;
 import com.pillgood.entity.Ownedcoupon;
 import com.pillgood.repository.OwnedcouponRepository;
@@ -25,6 +26,14 @@ public class OwnedcouponServiceImpl implements OwnedcouponService {
                 .collect(Collectors.toList());
     }
 
+
+    @Override
+    public List<OwnedcouponDto> getOwnedCouponByMemberId(String memberId) {
+        System.out.println(memberId + ": 쿠폰 조회");
+        return ownedcouponRepository.findByMemberUniqueId(memberId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
     @Override
     public List<OwnedcouponDto> getOwnedCouponsByMember(String memberUniqueId) {
         return ownedcouponRepository.findByMemberUniqueId(memberUniqueId).stream()

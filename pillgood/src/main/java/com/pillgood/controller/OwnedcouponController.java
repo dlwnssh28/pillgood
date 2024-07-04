@@ -1,15 +1,20 @@
 package com.pillgood.controller;
 
+import com.pillgood.dto.CouponDto;
 import com.pillgood.dto.OwnedcouponDto;
 import com.pillgood.service.OwnedcouponService;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/ownedcoupons")
+@RequestMapping("/ownedcoupons")
 @RequiredArgsConstructor
 public class OwnedcouponController {
 
@@ -20,6 +25,26 @@ public class OwnedcouponController {
         List<OwnedcouponDto> ownedcoupons = ownedcouponService.getAllOwnedCoupons();
         return ResponseEntity.ok(ownedcoupons);
     }
+
+    
+    @GetMapping("/findbyid")
+    public ResponseEntity<?> getCouponsFindById(HttpSession session) {
+        String memberId = (String) session.getAttribute("memberId");
+        
+        if (memberId == null) {
+            return new ResponseEntity<>("세션에 memberId가 없습니다.", HttpStatus.UNAUTHORIZED);
+        }
+        
+        System.out.println(memberId + ": 쿠폰 조회");
+        List<OwnedcouponDto> ownedcoupons = ownedcouponService.getOwnedCouponByMemberId(memberId);
+        
+        if (ownedcoupons.isEmpty()) {
+            return new ResponseEntity<>("보유 쿠폰이 없습니다.", HttpStatus.NOT_FOUND);
+        }
+        
+        return new ResponseEntity<>(ownedcoupons, HttpStatus.OK);
+    }
+
 
     @GetMapping("/{ownedCouponId}")
     public ResponseEntity<OwnedcouponDto> getOwnedCouponById(@PathVariable Integer ownedCouponId) {

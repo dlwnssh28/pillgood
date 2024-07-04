@@ -13,4 +13,13 @@ public class NoticeDto {
     private Integer noticeNo;
     private String noticeTitle;
     private String noticeContent;
+
+    @Override
+    public String toString() {
+        return "NoticeDto{" +
+                "noticeNo=" + noticeNo +
+                ", noticeTitle='" + noticeTitle + '\'' +
+                ", noticeContent='" + noticeContent + '\'' +
+                '}';
+    }
 }

@@ -31,8 +31,14 @@ public class Order {
     @Column(name = "recipient", length = 100)
     private String recipient;
 
+    @Column(name = "postal_code", length = 10)
+    private String postalCode;
+
     @Column(name = "address", length = 255)
     private String address;
+
+    @Column(name = "detailed_address", length = 255)
+    private String detailedAddress;
 
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;

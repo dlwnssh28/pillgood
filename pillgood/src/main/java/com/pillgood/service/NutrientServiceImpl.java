@@ -23,6 +23,7 @@ public class NutrientServiceImpl implements NutrientService {
         nutrient.setDescription(nutrientDto.getDescription());
         nutrient = nutrientRepository.save(nutrient);
         nutrientDto.setNutrientId(nutrient.getNutrientId());
+        nutrientDto.setDescription(nutrient.getDescription());
         return nutrientDto;
     }
 

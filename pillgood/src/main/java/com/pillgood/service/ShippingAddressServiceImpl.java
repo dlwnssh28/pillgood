@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.pillgood.dto.CartDto;
 import com.pillgood.dto.ShippingAddressDto;
 import com.pillgood.entity.ShippingAddress;
 import com.pillgood.repository.ShippingAddressRepository;
@@ -21,6 +22,14 @@ class ShippingAddressServiceImpl implements ShippingAddressService {
     @Override
     public List<ShippingAddressDto> getAllShippingAddresses() {
         return shippingAddressRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ShippingAddressDto> getAddressesByMemberId(String memberId) {
+        System.out.println(memberId + ": 배송주소 조회");
+        return shippingAddressRepository.findByMemberUniqueId(memberId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }

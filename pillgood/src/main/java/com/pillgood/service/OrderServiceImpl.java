@@ -32,8 +32,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
         Order orderEntity = convertToEntity(orderDto);
+
+        // 기본 키 수동 설정
+        String orderNo = generateOrderNo(); // 고유한 주문 번호 생성 로직을 여기에 추가하세요.
+        orderEntity.setOrderNo(orderNo);
+        
         orderRepository.save(orderEntity);
         return convertToDto(orderEntity);
+    }
+    
+    private String generateOrderNo() {
+        // 고유한 주문 번호를 생성하는 로직을 구현합니다.
+        // 예를 들어, 현재 시간과 랜덤 문자열을 조합하여 생성할 수 있습니다.
+        return "ORD-" + System.currentTimeMillis();
     }
 
     @Override
@@ -60,7 +71,9 @@ public class OrderServiceImpl implements OrderService {
                 orderEntity.getOrderRequest(),
                 orderEntity.getOrderDate(),
                 orderEntity.getRecipient(),
+                orderEntity.getPostalCode(),
                 orderEntity.getAddress(),
+                orderEntity.getDetailedAddress(),
                 orderEntity.getPhoneNumber(),
                 orderEntity.getMemberUniqueId(),
                 orderEntity.getOwnedCouponId(),
@@ -76,7 +89,9 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderRequest(orderDto.getOrderRequest());
         order.setOrderDate(orderDto.getOrderDate());
         order.setRecipient(orderDto.getRecipient());
+        order.setPostalCode(orderDto.getPostalCode());
         order.setAddress(orderDto.getAddress());
+        order.setDetailedAddress(orderDto.getDetailedAddress());
         order.setPhoneNumber(orderDto.getPhoneNumber());
         order.setMemberUniqueId(orderDto.getMemberUniqueId());
         order.setOwnedCouponId(orderDto.getOwnedCouponId());
@@ -90,7 +105,9 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setOrderRequest(orderDto.getOrderRequest());
         orderEntity.setOrderDate(orderDto.getOrderDate());
         orderEntity.setRecipient(orderDto.getRecipient());
+        orderEntity.setPostalCode(orderDto.getPostalCode()); 
         orderEntity.setAddress(orderDto.getAddress());
+        orderEntity.setDetailedAddress(orderDto.getDetailedAddress());
         orderEntity.setPhoneNumber(orderDto.getPhoneNumber());
         orderEntity.setMemberUniqueId(orderDto.getMemberUniqueId());
         orderEntity.setOwnedCouponId(orderDto.getOwnedCouponId());
