@@ -26,7 +26,10 @@ public class NutrientController {
 
     @PostMapping("/create")
     public NutrientDto createNutrient(@RequestBody NutrientDto nutrientDTO) {
-        return nutrientService.createNutrient(nutrientDTO);
+        System.out.println("영양제 생성 시도: " + nutrientDTO);
+        NutrientDto createdNutrient = nutrientService.createNutrient(nutrientDTO);
+        System.out.println("생성된 영양제: " + createdNutrient);
+        return createdNutrient;
     }
 
     @GetMapping("/find/{id}")

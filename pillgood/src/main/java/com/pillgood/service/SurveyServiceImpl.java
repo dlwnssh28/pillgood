@@ -2,8 +2,11 @@ package com.pillgood.service;
 
 import com.pillgood.dto.SurveyDto;
 import com.pillgood.entity.Survey;
+import com.pillgood.repository.MemberRepository;
 import com.pillgood.repository.SurveyRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,9 @@ import java.util.stream.Collectors;
 public class SurveyServiceImpl implements SurveyService {
 
     private final SurveyRepository surveyRepository;
+    
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Override
     public List<SurveyDto> getAllSurveys() {
@@ -32,16 +38,44 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public List<SurveyDto> getSurveysByMemberId(String memberId) {
-        return surveyRepository.findByMemberUniqueId(memberId).stream()
+    public List<SurveyDto> getSurveysByMemberId(String memberUniqueId) {
+        return surveyRepository.findByMemberUniqueId(memberUniqueId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
+//    @Override
+//    public SurveyDto createSurvey(SurveyDto surveyDto) {
+//        // member_unique_id가 null이거나 해당 ID가 존재하지 않는 경우 예외를 던짐
+//        if (surveyDto.getMemberUniqueId() == null || !memberRepository.existsById(surveyDto.getMemberUniqueId())) {
+//            throw new IllegalArgumentException("Invalid member ID: " + surveyDto.getMemberUniqueId());
+//        }
+//
+//        // 설문 엔티티로 변환
+//        Survey surveyEntity = convertToEntity(surveyDto);
+//
+//        // 설문 엔티티를 데이터베이스에 저장
+//        Survey savedSurvey = surveyRepository.save(surveyEntity);
+//
+//        // 저장된 설문 엔티티를 DTO로 변환하여 반환
+//        return convertToDto(savedSurvey);
+//    }
+    
     @Override
     public SurveyDto createSurvey(SurveyDto surveyDto) {
+        // member_unique_id가 null이거나 해당 ID가 존재하지 않는 경우 예외를 던짐
+        if (surveyDto.getMemberUniqueId() == null || !memberRepository.existsById(surveyDto.getMemberUniqueId())) {
+            System.out.println("Invalid member ID: " + surveyDto.getMemberUniqueId()); // 로그 추가
+            throw new IllegalArgumentException("Invalid member ID: " + surveyDto.getMemberUniqueId());
+        }
+
+        // 설문 엔티티로 변환
         Survey surveyEntity = convertToEntity(surveyDto);
+
+        // 설문 엔티티를 데이터베이스에 저장
         Survey savedSurvey = surveyRepository.save(surveyEntity);
+
+        // 저장된 설문 엔티티를 DTO로 변환하여 반환
         return convertToDto(savedSurvey);
     }
 
